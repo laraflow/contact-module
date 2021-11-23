@@ -1,0 +1,22 @@
+{
+    "name": "Contact",
+    "alias": "contact",
+    "description": "",
+    "keywords": [
+        "framework",
+        "laravel",
+        "boilerplate",
+        "contact"
+    ],
+    "priority": 0,
+    "providers": [
+        "Modules\\Contact\\Providers\\ContactServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": [],
+    "minimumCoreVersion": "",
+    "title": "Contact",
+    "version":"0.0.1",
+    "author": "Hafijul Islam"
+}
