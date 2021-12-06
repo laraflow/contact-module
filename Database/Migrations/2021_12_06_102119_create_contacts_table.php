@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Modules\Core\Supports\Constant;
 
-class CreateFamilyContactTable extends Migration
+class CreateContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,10 +18,11 @@ class CreateFamilyContactTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Table Structure
-        Schema::create('family_contact', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->
-
+            $table->foreignId('user_id')->nullable();
+            $table->string('type')->nullable();
+            $table->foreignId('user_id')->nullable();
             $table->enum('enabled', array_keys(Constant::ENABLED_OPTIONS))
                             ->default(Constant::ENABLED_OPTION)->nullable();
             $table->foreignId('created_by')->index()->nullable();
@@ -44,7 +45,7 @@ class CreateFamilyContactTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Remove Table Structure
-        Schema::dropIfExists('family_contact');
+        Schema::dropIfExists('contacts');
 
         //Temporary Disable Foreign Key Constraints
         Schema::enableForeignKeyConstraints();
