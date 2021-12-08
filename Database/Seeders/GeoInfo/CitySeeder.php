@@ -18,10 +18,8 @@ class CitySeeder extends Seeder
         Model::unguard();
         DB::beginTransaction();
 
-        $countries = [];
-
         try {
-            DB::table('cities')->insert();
+            DB::table('cities')->insert([]);
             DB::commit();
         } catch (\PDOException $exception) {
             DB::rollBack();

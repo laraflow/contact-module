@@ -4,6 +4,8 @@ namespace Modules\Contact\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Contact\Database\Seeders\GeoInfo\CountrySeeder;
+use Modules\Contact\Database\Seeders\GeoInfo\StateSeeder;
 
 class ContactDatabaseSeeder extends Seeder
 {
@@ -15,7 +17,7 @@ class ContactDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        $this->call(CountrySeeder::class);
+        $this->call(StateSeeder::class);
     }
 }
