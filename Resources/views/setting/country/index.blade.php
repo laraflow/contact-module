@@ -66,8 +66,8 @@
                                             <td class="exclude-search align-middle">
                                                 {{ $country->id }}
                                             </td>
-                                            <th class="text-center align-middle">
-                                        <span style="font-size: 200%;" data-toggle="tooltip"
+                                            <th class="text-center align-middle p-0">
+                                        <span style="font-size: 300%;" data-toggle="tooltip"
                                               data-title="{!!  $country->native !!}" data-html="true">
                                             {!! $country->emoji !!}
                                         </span>
