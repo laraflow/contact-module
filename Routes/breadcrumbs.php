@@ -18,7 +18,7 @@ Breadcrumbs::for('contact.settings.countries.create', function (BreadcrumbTrail 
 
     $trail->parent('contact.settings.countries.index');
 
-    $trail->push('Add', route('contact.settings.countries.create'));
+    $trail->push('Add Country', route('contact.settings.countries.create'));
 });
 
 Breadcrumbs::for('contact.settings.countries.show', function (BreadcrumbTrail $trail, $country) {

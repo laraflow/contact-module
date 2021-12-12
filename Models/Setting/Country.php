@@ -47,7 +47,8 @@ class Country extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'call_code' => 'array'
+        'translations' => 'array',
+        'timezones' => 'array'
     ];
 
     /**

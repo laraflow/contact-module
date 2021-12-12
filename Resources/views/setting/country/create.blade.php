@@ -1,6 +1,6 @@
 @extends('core::layouts.app')
 
-@section('title', 'Add Permission')
+@section('title', 'Add Country')
 
 @push('meta')
 
@@ -26,16 +26,18 @@
 @section('breadcrumbs', \Breadcrumbs::render(Route::getCurrentRoute()->getName()))
 
 @section('actions')
-    {!! \Html::backButton('core.settings.permissions.index') !!}
+    {!! \Html::backButton('contact.settings.countries.index') !!}
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                {!! \Form::open(['route' => 'core.settings.permissions.store', 'id' => 'permission-form']) !!}
-                @include('core::setting.permission.form')
-                {!! \Form::close() !!}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    {!! \Form::open(['route' => 'contact.settings.countries.store', 'id' => 'country-form']) !!}
+                    @include('contact::setting.country.form')
+                    {!! \Form::close() !!}
+                </div>
             </div>
         </div>
     </div>

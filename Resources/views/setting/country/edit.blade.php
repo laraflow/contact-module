@@ -35,22 +35,24 @@
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                {!! \Form::open(['route' => ['core.settings.permissions.update', $permission->id], 'method' => 'put', 'id' => 'permission-form']) !!}
-                @include('core::setting.permission.form')
-                {!! \Form::close() !!}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    {!! \Form::open(['route' => ['core.settings.permissions.update', $permission->id], 'method' => 'put', 'id' => 'permission-form']) !!}
+                    @include('core::setting.permission.form')
+                    {!! \Form::close() !!}
+                </div>
             </div>
         </div>
     </div>
-    @endsection
+@endsection
 
 
-    @push('plugin-script')
+@push('plugin-script')
 
-    @endpush
+@endpush
 
-    @push('page-script')
+@push('page-script')
 
-    @endpush
+@endpush
