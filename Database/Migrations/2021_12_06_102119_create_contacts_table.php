@@ -22,7 +22,6 @@ class CreateContactsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->string('type')->nullable();
-            $table->foreignId('user_id')->nullable();
             $table->enum('enabled', array_keys(Constant::ENABLED_OPTIONS))
                             ->default(Constant::ENABLED_OPTION)->nullable();
             $table->foreignId('created_by')->index()->nullable();

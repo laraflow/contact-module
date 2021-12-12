@@ -9,7 +9,7 @@ use Modules\Contact\Models\Setting\State;
 /****************************************** Country ******************************************/
 Breadcrumbs::for('contact.settings.countries.index', function (BreadcrumbTrail $trail) {
 
-    $trail->parent('core.settings');
+    $trail->parent('core.settings.index');
 
     $trail->push('Countries', route('contact.settings.countries.index'));
 });
@@ -40,7 +40,7 @@ Breadcrumbs::for('contact.settings.countries.edit', function (BreadcrumbTrail $t
 /****************************************** State ******************************************/
 Breadcrumbs::for('contact.settings.states.index', function (BreadcrumbTrail $trail) {
 
-    $trail->parent('core.settings');
+    $trail->parent('core.settings.index');
 
     $trail->push('States', route('contact.settings.states.index'));
 });
@@ -71,7 +71,7 @@ Breadcrumbs::for('contact.settings.states.edit', function (BreadcrumbTrail $trai
 /****************************************** City ******************************************/
 Breadcrumbs::for('contact.settings.cities.index', function (BreadcrumbTrail $trail) {
 
-    $trail->parent('core.settings');
+    $trail->parent('core.settings.index');
 
     $trail->push('Cities', route('contact.settings.cities.index'));
 });

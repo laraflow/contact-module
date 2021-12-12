@@ -25,8 +25,8 @@ class CreateCitiesTable extends Migration
             $table->foreignId('country_id')->nullable();
             $table->string('type')->nullable();
             $table->string('native')->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 10, 8)->nullable();
+            $table->decimal('latitude', 18, 8)->nullable();
+            $table->decimal('longitude', 18, 8)->nullable();
             $table->enum('enabled', array_keys(Constant::ENABLED_OPTIONS))
                 ->default(Constant::ENABLED_OPTION)->nullable();
             $table->foreignId('created_by')->index()->nullable();

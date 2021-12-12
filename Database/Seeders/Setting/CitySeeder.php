@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Contact\Database\Seeders\GeoInfo;
+namespace Modules\Contact\Database\Seeders\Setting;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;

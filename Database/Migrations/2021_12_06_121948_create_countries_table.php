@@ -33,8 +33,8 @@ class CreateCountriesTable extends Migration
             $table->string('subregion')->nullable();
             $table->json('timezones')->nullable();
             $table->json('translations')->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 10, 8)->nullable();
+            $table->decimal('latitude', 18, 8)->nullable();
+            $table->decimal('longitude', 18, 8)->nullable();
             $table->string('emojiU')->nullable();
             $table->string('emoji')->nullable();
             $table->enum('enabled', array_keys(Constant::ENABLED_OPTIONS))

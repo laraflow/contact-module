@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Contact\Http\Controllers\ContactController;
 use Modules\Contact\Http\Controllers\Setting\CityController;
 use Modules\Contact\Http\Controllers\Setting\CountryController;
 use Modules\Contact\Http\Controllers\Setting\StateController;
@@ -16,11 +17,9 @@ use Modules\Contact\Http\Controllers\Setting\StateController;
 |
 */
 
-Route::prefix('contact')->name('contact.')->group(function() {
-    Route::get('/', 'ContactController@index');
-
+Route::name('contact.')->group(function() {
     Route::prefix('settings')->name('settings.')->group(function () {
-        //City
+        //Country
         Route::resource('countries', CountryController::class)->where(['country' => '([0-9]+)']);
         Route::prefix('countries')->name('countries.')->group(function () {
             Route::patch('{user}/restore', [CountryController::class, 'restore'])->name('restore');
@@ -52,4 +51,8 @@ Route::prefix('contact')->name('contact.')->group(function() {
             Route::get('ajax', [CityController::class, 'ajax'])->name('ajax')->middleware('ajax');
         });
     });
+});
+
+Route::prefix('contact')->name('contact.')->group(function() {
+    Route::get('/', [ContactController::class, 'index']);
 });

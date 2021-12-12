@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Modules\Core\Models\Setting;
 use Modules\Core\Supports\Constant;
 
-class SettingSeeder extends Seeder
+class ContactSettingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,23 +22,23 @@ class SettingSeeder extends Seeder
             'country' => [
                 'name' => 'Countries',
                 'icon' => 'fas fa-globe',
-                'route' => 'contact.geoinfo.countries.index',
+                'route' => 'contact.setting.countries.index',
                 'color' => '#007bff',
                 'description' => 'Countries list on this system',
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'role' => [
-                'name' => 'Roles',
+                'name' => 'States',
                 'icon' => 'fas fa-address-card',
-                'route' => 'core.settings.roles.index',
+                'route' => 'contact.settings.states.index',
                 'color' => '#007bff',
-                'description' => 'user who can access this system',
+                'description' => 'states available on countries',
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'permission' => [
-                'name' => 'Permissions',
+                'name' => 'Cities',
                 'icon' => 'fas fa-list-alt',
-                'route' => 'core.settings.permissions.index',
+                'route' => 'contact.settings.cities.index',
                 'color' => '#007bff',
                 'description' => 'user who can access this system',
                 'enabled' => Constant::ENABLED_OPTION
