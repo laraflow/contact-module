@@ -22,7 +22,7 @@ class ContactSettingSeeder extends Seeder
             'country' => [
                 'name' => 'Countries',
                 'icon' => 'fas fa-globe',
-                'route' => 'contact.setting.countries.index',
+                'route' => 'contact.settings.countries.index',
                 'color' => '#007bff',
                 'description' => 'Countries list on this system',
                 'enabled' => Constant::ENABLED_OPTION

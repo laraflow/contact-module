@@ -1,6 +1,6 @@
 @extends('core::layouts.app')
 
-@section('title', 'Permissions')
+@section('title', 'Countries')
 
 @push('meta')
 
@@ -30,79 +30,103 @@
 @section('breadcrumbs', \Breadcrumbs::render())
 
 @section('actions')
-    {!! \Html::linkButton('Add Permission', 'core.settings.permissions.create', [], 'mdi mdi-plus', 'success') !!}
-    {!! \Html::bulkDropdown('core.settings.permissions', 0, ['color' => 'warning']) !!}
+    {!! \Html::linkButton('Add Country', 'contact.settings.countries.create', [], 'mdi mdi-plus', 'success') !!}
+    {!! \Html::bulkDropdown('contact.settings.countries', 0, ['color' => 'warning']) !!}
 @endsection
 
 @section('content')
     <div class="container-fluid">
-        <div class="card card-default">
-            @if(!empty($permissions))
-                <div class="card-body p-0">
-                    {!! \Html::cardSearch('search', 'core.settings.permissions.index',
-                    ['placeholder' => 'Search Permission Display Name, Code, Guard, Status, etc.',
-                    'class' => 'form-control', 'id' => 'search', 'data-target-table' => 'permission-table']) !!}
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0" id="permission-table">
-                            <thead class="thead-light">
-                            <tr>
-                                <th class="align-middle">
-                                    @sortablelink('id', '#')
-                                </th>
-                                <th>@sortablelink('display_name', 'Display Name')</th>
-                                <th>@sortablelink('name', 'Name')</th>
-                                <th>@sortablelink('guard_name', 'Guard')</th>
-                                <th class="text-center">@sortablelink('enabled', 'Enabled')</th>
-                                <th class="text-center">@sortablelink('created_at', 'Created')</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($permissions as $index => $permission)
-                                <tr @if($permission->deleted_at != null) class="table-danger" @endif>
-                                    <td class="exclude-search align-middle">
-                                        {{ $permission->id }}
-                                    </td>
-                                    <td class="text-left">
-                                        @can('core.settings.permissions.show')
-                                            <a href="{{ route('core.settings.permissions.show', $permission->id) }}">
-                                                {{ $permission->display_name }}
-                                            </a>
-                                        @else
-                                            {{ $permission->display_name }}
-                                        @endcan
-                                    </td>
-                                    <td>{{ $permission->name }}</td>
-                                    <td>{{ $permission->guard_name }}</td>
-                                    <td class="text-center exclude-search">
-                                        {!! \Html::enableToggle($permission) !!}
-                                    </td>
-                                    <td class="text-center">{{ $permission->created_at->format(config('app.datetime')) ?? '' }}</td>
-                                    <td class="exclude-search pr-3 text-center align-middle">
-                                        {!! \Html::actionDropdown('core.settings.permissions', $permission->id, array_merge(['show', 'edit'], ($permission->deleted_at == null) ? ['delete'] : ['restore'])) !!}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="exclude-search text-center">No data to display</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent pb-0">
-                    {!! \Modules\Core\Supports\CHTML::pagination($permissions) !!}
-                </div>
-            @else
-                <div class="card-body min-vh-100">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-default">
+                    @if(!empty($countries))
+                        <div class="card-body p-0">
+                            {!! \Html::cardSearch('search', 'contact.settings.countries.index',
+                            ['placeholder' => 'Search Permission Display Name, Code, Guard, Status, etc.',
+                            'class' => 'form-control', 'id' => 'search', 'data-target-table' => 'permission-table']) !!}
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0" id="permission-table">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th class="align-middle">@sortablelink('id', '#')</th>
+                                        <th class="text-center align-middle">
+                                            Flag
+                                        </th>
+                                        <th>@sortablelink('name', 'Name')</th>
+                                        <th>@sortablelink('iso3', 'ISO Code')</th>
+                                        <th>@sortablelink('region', 'Region')</th>
+                                        <th class="text-center">@sortablelink('enabled', 'Enabled')</th>
+                                        <th class="text-center">@sortablelink('created_at', 'Created')</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse($countries as $index => $country)
+                                        <tr @if($country->deleted_at != null) class="table-danger" @endif>
+                                            <td class="exclude-search align-middle">
+                                                {{ $country->id }}
+                                            </td>
+                                            <th class="text-center align-middle">
+                                        <span style="font-size: 200%;" data-toggle="tooltip"
+                                              data-title="{!!  $country->native !!}" data-html="true">
+                                            {!! $country->emoji !!}
+                                        </span>
+                                            </th>
+                                            <td class="text-left">
+                                                @can('contact.settings.countries.show')
+                                                    <a href="{{ route('contact.settings.countries.show', $country->id) }}">
+                                                        {{ $country->name }}
+                                                    </a>
+                                                @else
+                                                    {{ $country->name }}
+                                                @endcan
+                                                <span class="mb-0 d-block">
+                                            {!! $country->native !!}
+                                        </span>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $country->iso3 }}
+                                                @if($country->iso2 != null)
+                                                    ({{ $country->iso2 }})
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $country->region }}
+                                                @if($country->subregion != null)
+                                                    ({{ $country->subregion }})
+                                                @endif
+                                            </td>
+                                            <td class="text-center exclude-search">
+                                                {!! \Html::enableToggle($country) !!}
+                                            </td>
+                                            <td class="text-center">{{ $country->created_at->format(config('app.datetime')) ?? '' }}</td>
+                                            <td class="exclude-search pr-3 text-center align-middle">
+                                                {!! \Html::actionDropdown('contact.settings.countries', $country->id, array_merge(['show', 'edit'], ($country->deleted_at == null) ? ['delete'] : ['restore'])) !!}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="exclude-search text-center">No data to display</td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent pb-0">
+                            {!! \Modules\Core\Supports\CHTML::pagination($countries) !!}
+                        </div>
+                    @else
+                        <div class="card-body min-vh-100">
 
+                        </div>
+                    @endif
                 </div>
-            @endif
+            </div>
         </div>
     </div>
     <!-- /.container-fluid -->
-    {!! \Modules\Core\Supports\CHTML::confirmModal('Permission', ['export', 'delete', 'restore']) !!}
+    {!! \Modules\Core\Supports\CHTML::confirmModal('Country', ['export', 'delete', 'restore']) !!}
 @endsection
 
 

@@ -2,8 +2,9 @@
 
 namespace Modules\Contact\Models\Setting;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
 use Modules\Core\Models\Setting\User;
@@ -31,7 +32,7 @@ class Country extends Model implements Auditable
      *
      * @var array
      */
-    protected $fillable = [ 'name', 'local_name', 'short_code', 'code', 'call_code', 'unicode_flag', 'image_flag', 'enabled', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['name', 'local_name', 'short_code', 'code', 'call_code', 'unicode_flag', 'image_flag', 'enabled', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -82,5 +83,22 @@ class Country extends Model implements Auditable
     public function deletedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+
+    /**
+     * @return HasMany
+     */
+    public function states(): HasMany
+    {
+        return $this->hasMany(State::class, 'country_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function cities(): HasMany
+    {
+        return $this->hasMany(City::class, 'country_id', 'id');
     }
 }
