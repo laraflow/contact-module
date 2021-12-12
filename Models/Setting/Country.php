@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Contact\Models\GeoInfo;
+namespace Modules\Contact\Models\Setting;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;

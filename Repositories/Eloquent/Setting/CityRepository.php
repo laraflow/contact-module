@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Modules\Contact\Repositories\Eloquent\GeoInfo;
+namespace Modules\Contact\Repositories\Eloquent\Setting;
 
 
 use Exception;
@@ -9,7 +9,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Auth\Services\AuthenticatedSessionService;
-use Modules\Contact\Models\GeoInfo\City;
+use Modules\Contact\Models\Setting\City;
 use Modules\Core\Abstracts\Repository\EloquentRepository;
 
 class CityRepository extends EloquentRepository
@@ -87,7 +87,7 @@ class CityRepository extends EloquentRepository
      * @return Builder[]|Collection
      * @throws Exception
      */
-    public function getAllPermissionWith(array $filters = [], array $eagerRelations = [], bool $is_sortable = false)
+    public function getAllCityWith(array $filters = [], array $eagerRelations = [], bool $is_sortable = false)
     {
         try {
             $query = $this->filterData($filters, $is_sortable);
