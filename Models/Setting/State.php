@@ -5,6 +5,7 @@ namespace Modules\Contact\Models\Setting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
 use Modules\Core\Models\Setting\User;
@@ -88,5 +89,22 @@ class State extends Model implements Auditable
     public function deletedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    /************************ Relations ************************/
+    /**
+     * @return BelongsTo
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function cities(): HasMany
+    {
+        return $this->hasMany(City::class, 'country_id', 'id');
     }
 }

@@ -10,6 +10,7 @@ use Kyslik\ColumnSortable\Sortable;
 use Modules\Core\Models\Setting\User;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
+use function Illuminate\Events\queueable;
 
 class Country extends Model implements Auditable
 {
@@ -86,7 +87,10 @@ class Country extends Model implements Auditable
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
+    /************************ Events ************************/
 
+
+    /************************ Relations ************************/
     /**
      * @return HasMany
      */
