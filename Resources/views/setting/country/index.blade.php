@@ -47,9 +47,7 @@
                                     <thead class="thead-light">
                                     <tr>
                                         <th class="align-middle">@sortablelink('id', '#')</th>
-                                        <th class="text-center align-middle">
-                                            Flag
-                                        </th>
+                                        <th class="text-center align-middle">Flag</th>
                                         <th>@sortablelink('name', 'Name')</th>
                                         <th class="text-center">@sortablelink('iso3', 'ISO Code')</th>
                                         <th>@sortablelink('region', 'Region')</th>

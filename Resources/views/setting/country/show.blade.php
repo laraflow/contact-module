@@ -96,6 +96,15 @@
                                         <p class="fw-bolder">{{ $country->numeric_code ?? null }}</p>
                                     </div>
                                     <div class="col-md-6">
+                                        <label class="d-block">States</label>
+                                        <p class="fw-bolder">{{ $country->total_states ?? null }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="d-block">Cities</label>
+                                        <p class="fw-bolder">{{ $country->total_cities ?? null }}</p>
+                                    </div>
+
+                                    <div class="col-md-6">
                                         <label class="d-block">Capital</label>
                                         <p class="fw-bolder">{{ $country->capital ?? null }}</p>
                                     </div>
@@ -262,7 +271,7 @@
             </div>
         </div>
     </div>
-    {!! \Modules\Core\Supports\CHTML::confirmModal('Permission', ['delete', 'restore']) !!}
+    {!! \Modules\Core\Supports\CHTML::confirmModal('Country', ['delete', 'restore']) !!}
 @endsection
 
 

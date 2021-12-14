@@ -10,7 +10,6 @@ use Kyslik\ColumnSortable\Sortable;
 use Modules\Core\Models\Setting\User;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
-use function Illuminate\Events\queueable;
 
 class Country extends Model implements Auditable
 {
@@ -105,5 +104,21 @@ class Country extends Model implements Auditable
     public function cities(): HasMany
     {
         return $this->hasMany(City::class, 'country_id', 'id');
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalStatesAttribute(): int
+    {
+        return $this->hasMany(State::class, 'country_id', 'id')->count();
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalCitiesAttribute(): int
+    {
+        return $this->hasMany(City::class, 'country_id', 'id')->count();
     }
 }

@@ -35,6 +35,7 @@ class StateRepository extends EloquentRepository
     private function filterData(array $filters = [], bool $is_sortable = false): Builder
     {
         $query = $this->getQueryBuilder();
+
         if (!empty($filters['search'])) :
             $query->where('name', 'like', "%{$filters['search']}%")
                 ->orWhere('enabled', '=', "%{$filters['search']}%");

@@ -58,7 +58,7 @@ Breadcrumbs::for('contact.settings.states.show', function (BreadcrumbTrail $trai
 
     $state = ($state instanceof State) ? $state : $state[0];
 
-    $trail->push($state->display_name, route('contact.settings.states.show', $state->id));
+    $trail->push($state->name, route('contact.settings.states.show', $state->id));
 });
 
 Breadcrumbs::for('contact.settings.states.edit', function (BreadcrumbTrail $trail, State $state) {
