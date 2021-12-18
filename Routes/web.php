@@ -58,7 +58,7 @@ Route::name('contact.')->group(function() {
         //Blood Group
         Route::resource('blood-groups', BloodGroupController::class)->where(['blood-group' => '([0-9]+)']);
         Route::prefix('blood-groups')->name('blood-groups.')->group(function () {
-            Route::patch('{blood-group}/restore', [BloodGroupController::class, 'restore'])->name('restore');
+            Route::patch('{blood-group}/restore', [BloodGroupController::class, 'restore'])->name('restore')->where(['blood-group' => '([0-9]+)']);
             Route::get('export', [BloodGroupController::class, 'export'])->name('export');
             Route::get('import', [BloodGroupController::class, 'import'])->name('import');
             Route::post('import', [BloodGroupController::class, 'importBulk']);

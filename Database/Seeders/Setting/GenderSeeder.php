@@ -4,6 +4,7 @@ namespace Modules\Contact\Database\Seeders\Setting;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @class GenderTableSeeder
@@ -19,7 +20,15 @@ class GenderSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        $timestamp = date('Y-m-d h:i:s');
+        try {
+            DB::table('genders')->insert([
+                ['name' => 'Female', 'remarks' => 'famine gender', 'additional_info' => '{}', 'enabled' => 'yes', 'created_at' => $timestamp, 'updated_at' => $timestamp, 'deleted_at' => null],
+                ['name' => 'Male', 'remarks' => 'muscular gender', 'additional_info' => '{}', 'enabled' => 'yes', 'created_at' => $timestamp, 'updated_at' => $timestamp, 'deleted_at' => null],
+                ['name' => 'Others', 'remarks' => 'other', 'additional_info' => '{}', 'enabled' => 'yes', 'created_at' => $timestamp, 'updated_at' => $timestamp, 'deleted_at' => null],
+            ]);
+        }catch (\PDOException $exception) {
+            throw new \PDOException($exception->getMessage());
+        }
     }
 }

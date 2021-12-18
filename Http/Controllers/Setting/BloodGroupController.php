@@ -54,10 +54,10 @@ class BloodGroupController extends Controller
     public function index(Request $request)
     {
         $filters = $request->except('page');
-        $countries = $this->bloodGroupService->bloodGroupPaginate($filters);
+        $bloodGroups = $this->bloodGroupService->bloodGroupPaginate($filters);
 
         return view('contact::setting.blood-group.index', [
-            'countries' => $countries
+            'bloodGroups' => $bloodGroups
         ]);
     }
 

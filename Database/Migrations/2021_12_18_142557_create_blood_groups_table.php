@@ -45,7 +45,7 @@ class CreateBloodGroupsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Remove Table Structure
-        Schema::dropIfExists('bloodgroups');
+        Schema::dropIfExists('blood_groups');
 
         //Temporary Disable Foreign Key Constraints
         Schema::enableForeignKeyConstraints();
