@@ -2,41 +2,47 @@
 
 namespace Modules\Contact\Http\Controllers\Setting;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Modules\Auth\Services\AuthenticatedSessionService;
-use Modules\Contact\Http\Requests\Setting\CountryRequest;
-use Modules\Contact\Services\Setting\CountryService;
+use Modules\Contact\Http\Requests\Setting\BloodGroupRequest;
+use Modules\Contact\Services\Setting\BloodGroupService;
 use Modules\Core\Supports\Utility;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class CountryController extends Controller
+
+/**
+ * @class BloodGroupController
+ * @package Contact
+ */
+class BloodGroupController extends Controller
 {
     /**
      * @var AuthenticatedSessionService
      */
     private $authenticatedSessionService;
-
+    
     /**
-     * @var CountryService
+     * @var BloodGroupService
      */
-    private $countryService;
+    private $bloodGroupService;
+
 
     /**
      * @param AuthenticatedSessionService $authenticatedSessionService
-     * @param CountryService $countryService
+     * @param BloodGroupService $bloodGroupService
      */
     public function __construct(AuthenticatedSessionService $authenticatedSessionService,
-                                CountryService              $countryService)
+    BloodGroupService $bloodGroupService)
     {
 
         $this->authenticatedSessionService = $authenticatedSessionService;
-        $this->countryService = $countryService;
+        $this->bloodGroupService = $bloodGroupService;
     }
 
     /**
@@ -48,9 +54,9 @@ class CountryController extends Controller
     public function index(Request $request)
     {
         $filters = $request->except('page');
-        $countries = $this->countryService->countryPaginate($filters);
+        $countries = $this->bloodGroupService->bloodGroupPaginate($filters);
 
-        return view('contact::setting.country.index', [
+        return view('contact::setting.blood-group.index', [
             'countries' => $countries
         ]);
     }
@@ -62,22 +68,22 @@ class CountryController extends Controller
      */
     public function create()
     {
-        return view('contact::setting.country.create');
+        return view('contact::setting.blood-group.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param CountryRequest $request
+     * @param BloodGroupRequest $request
      * @return RedirectResponse
      * @throws Exception|\Throwable
      */
-    public function store(CountryRequest $request): RedirectResponse
+    public function store(BloodGroupRequest $request): RedirectResponse
     {
-        $confirm = $this->countryService->storeCountry($request->except('_token'));
+        $confirm = $this->bloodGroupService->storeBloodGroup($request->except('_token'));
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.blood-groups.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -93,10 +99,10 @@ class CountryController extends Controller
      */
     public function show($id)
     {
-        if ($country = $this->countryService->getCountryById($id)) {
-            return view('contact::setting.country.show', [
-                'country' => $country,
-                'timeline' => Utility::modelAudits($country)
+        if ($bloodGroup = $this->bloodGroupService->getBloodGroupById($id)) {
+            return view('contact::setting.blood-group.show', [
+                'bloodGroup' => $bloodGroup,
+                'timeline' => Utility::modelAudits($bloodGroup)
             ]);
         }
 
@@ -112,9 +118,9 @@ class CountryController extends Controller
      */
     public function edit($id)
     {
-        if ($country = $this->countryService->getCountryById($id)) {
-            return view('contact::setting.country.edit', [
-                'country' => $country
+        if ($bloodGroup = $this->bloodGroupService->getBloodGroupById($id)) {
+            return view('contact::setting.blood-group.edit', [
+                'bloodGroup' => $bloodGroup
             ]);
         }
 
@@ -124,18 +130,18 @@ class CountryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param CountryRequest $request
+     * @param BloodGroupRequest $request
      * @param  $id
      * @return RedirectResponse
      * @throws \Throwable
      */
-    public function update(CountryRequest $request, $id): RedirectResponse
+    public function update(BloodGroupRequest $request, $id): RedirectResponse
     {
-        $confirm = $this->countryService->updateCountry($request->except('_token', 'submit', '_method'), $id);
+        $confirm = $this->bloodGroupService->updateBloodGroup($request->except('_token', 'submit', '_method'), $id);
 
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.blood-groups.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -154,14 +160,14 @@ class CountryController extends Controller
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->countryService->destroyCountry($id);
+            $confirm = $this->bloodGroupService->destroyBloodGroup($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.blood-groups.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -178,14 +184,14 @@ class CountryController extends Controller
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->countryService->restoreCountry($id);
+            $confirm = $this->bloodGroupService->restoreBloodGroup($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.blood-groups.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -200,12 +206,12 @@ class CountryController extends Controller
     {
         $filters = $request->except('page');
 
-        $countryExport = $this->countryService->exportCountry($filters);
+        $bloodGroupExport = $this->bloodGroupService->exportBloodGroup($filters);
 
-        $filename = 'Country-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'BloodGroup-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $countryExport->download($filename, function ($country) use ($countryExport) {
-            return $countryExport->map($country);
+        return $bloodGroupExport->download($filename, function ($bloodGroup) use ($bloodGroupExport) {
+            return $bloodGroupExport->map($bloodGroup);
         });
 
     }
@@ -217,7 +223,7 @@ class CountryController extends Controller
      */
     public function import()
     {
-        return view('contact::setting.country.import');
+        return view('contact::setting.blood-group.import');
     }
 
     /**
@@ -229,10 +235,10 @@ class CountryController extends Controller
     public function importBulk(Request $request)
     {
         $filters = $request->except('page');
-        $countrys = $this->countryService->getAllCountries($filters);
+        $bloodGroups = $this->bloodGroupService->getAllBloodGroups($filters);
 
-        return view('contact::setting.country.index', [
-            'countrys' => $countrys
+        return view('contact::setting.blood-group.index', [
+            'bloodGroups' => $bloodGroups
         ]);
     }
 
@@ -246,12 +252,12 @@ class CountryController extends Controller
     {
         $filters = $request->except('page');
 
-        $countryExport = $this->countryService->exportCountry($filters);
+        $bloodGroupExport = $this->bloodGroupService->exportBloodGroup($filters);
 
-        $filename = 'Country-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'BloodGroup-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $countryExport->download($filename, function ($country) use ($countryExport) {
-            return $countryExport->map($country);
+        return $bloodGroupExport->download($filename, function ($bloodGroup) use ($bloodGroupExport) {
+            return $bloodGroupExport->map($bloodGroup);
         });
 
     }

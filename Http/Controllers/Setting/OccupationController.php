@@ -2,20 +2,26 @@
 
 namespace Modules\Contact\Http\Controllers\Setting;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Modules\Auth\Services\AuthenticatedSessionService;
-use Modules\Contact\Http\Requests\Setting\CountryRequest;
-use Modules\Contact\Services\Setting\CountryService;
+use Modules\Contact\Http\Requests\Setting\OccupationRequest;
+use Modules\Contact\Services\Setting\OccupationService;
 use Modules\Core\Supports\Utility;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Throwable;
 
-class CountryController extends Controller
+
+/**
+ * @class OccupationController
+ * @package Contact
+ */
+class OccupationController extends Controller
 {
     /**
      * @var AuthenticatedSessionService
@@ -23,20 +29,20 @@ class CountryController extends Controller
     private $authenticatedSessionService;
 
     /**
-     * @var CountryService
+     * @var OccupationService
      */
-    private $countryService;
+    private $occupationService;
 
     /**
      * @param AuthenticatedSessionService $authenticatedSessionService
-     * @param CountryService $countryService
+     * @param OccupationService $occupationService
      */
     public function __construct(AuthenticatedSessionService $authenticatedSessionService,
-                                CountryService              $countryService)
+                                OccupationService              $occupationService)
     {
 
         $this->authenticatedSessionService = $authenticatedSessionService;
-        $this->countryService = $countryService;
+        $this->occupationService = $occupationService;
     }
 
     /**
@@ -48,10 +54,10 @@ class CountryController extends Controller
     public function index(Request $request)
     {
         $filters = $request->except('page');
-        $countries = $this->countryService->countryPaginate($filters);
+        $occupations = $this->occupationService->occupationPaginate($filters);
 
-        return view('contact::setting.country.index', [
-            'countries' => $countries
+        return view('contact::setting.occupation.index', [
+            'occupations' => $occupations
         ]);
     }
 
@@ -62,22 +68,22 @@ class CountryController extends Controller
      */
     public function create()
     {
-        return view('contact::setting.country.create');
+        return view('contact::setting.occupation.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param CountryRequest $request
+     * @param OccupationRequest $request
      * @return RedirectResponse
-     * @throws Exception|\Throwable
+     * @throws Exception|Throwable
      */
-    public function store(CountryRequest $request): RedirectResponse
+    public function store(OccupationRequest $request): RedirectResponse
     {
-        $confirm = $this->countryService->storeCountry($request->except('_token'));
+        $confirm = $this->occupationService->storeOccupation($request->except('_token'));
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.occupations.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -93,10 +99,10 @@ class CountryController extends Controller
      */
     public function show($id)
     {
-        if ($country = $this->countryService->getCountryById($id)) {
-            return view('contact::setting.country.show', [
-                'country' => $country,
-                'timeline' => Utility::modelAudits($country)
+        if ($occupation = $this->occupationService->getOccupationById($id)) {
+            return view('contact::setting.occupation.show', [
+                'occupation' => $occupation,
+                'timeline' => Utility::modelAudits($occupation)
             ]);
         }
 
@@ -112,9 +118,9 @@ class CountryController extends Controller
      */
     public function edit($id)
     {
-        if ($country = $this->countryService->getCountryById($id)) {
-            return view('contact::setting.country.edit', [
-                'country' => $country
+        if ($occupation = $this->occupationService->getOccupationById($id)) {
+            return view('contact::setting.occupation.edit', [
+                'occupation' => $occupation
             ]);
         }
 
@@ -124,18 +130,18 @@ class CountryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param CountryRequest $request
+     * @param OccupationRequest $request
      * @param  $id
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function update(CountryRequest $request, $id): RedirectResponse
+    public function update(OccupationRequest $request, $id): RedirectResponse
     {
-        $confirm = $this->countryService->updateCountry($request->except('_token', 'submit', '_method'), $id);
+        $confirm = $this->occupationService->updateOccupation($request->except('_token', 'submit', '_method'), $id);
 
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.occupations.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -148,20 +154,20 @@ class CountryController extends Controller
      * @param $id
      * @param Request $request
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function destroy($id, Request $request)
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->countryService->destroyCountry($id);
+            $confirm = $this->occupationService->destroyOccupation($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.occupations.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -172,20 +178,20 @@ class CountryController extends Controller
      * @param $id
      * @param Request $request
      * @return RedirectResponse|void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function restore($id, Request $request)
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->countryService->restoreCountry($id);
+            $confirm = $this->occupationService->restoreOccupation($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.occupations.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -200,12 +206,12 @@ class CountryController extends Controller
     {
         $filters = $request->except('page');
 
-        $countryExport = $this->countryService->exportCountry($filters);
+        $occupationExport = $this->occupationService->exportOccupation($filters);
 
-        $filename = 'Country-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'Occupation-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $countryExport->download($filename, function ($country) use ($countryExport) {
-            return $countryExport->map($country);
+        return $occupationExport->download($filename, function ($occupation) use ($occupationExport) {
+            return $occupationExport->map($occupation);
         });
 
     }
@@ -217,7 +223,7 @@ class CountryController extends Controller
      */
     public function import()
     {
-        return view('contact::setting.country.import');
+        return view('contact::setting.occupation.import');
     }
 
     /**
@@ -229,10 +235,10 @@ class CountryController extends Controller
     public function importBulk(Request $request)
     {
         $filters = $request->except('page');
-        $countrys = $this->countryService->getAllCountries($filters);
+        $occupations = $this->occupationService->getAllOccupations($filters);
 
-        return view('contact::setting.country.index', [
-            'countrys' => $countrys
+        return view('contact::setting.occupation.index', [
+            'occupations' => $occupations
         ]);
     }
 
@@ -246,12 +252,12 @@ class CountryController extends Controller
     {
         $filters = $request->except('page');
 
-        $countryExport = $this->countryService->exportCountry($filters);
+        $occupationExport = $this->occupationService->exportOccupation($filters);
 
-        $filename = 'Country-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'Occupation-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $countryExport->download($filename, function ($country) use ($countryExport) {
-            return $countryExport->map($country);
+        return $occupationExport->download($filename, function ($occupation) use ($occupationExport) {
+            return $occupationExport->map($occupation);
         });
 
     }

@@ -2,20 +2,27 @@
 
 namespace Modules\Contact\Http\Controllers\Setting;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Modules\Auth\Services\AuthenticatedSessionService;
-use Modules\Contact\Http\Requests\Setting\CountryRequest;
-use Modules\Contact\Services\Setting\CountryService;
+use Modules\Contact\Http\Requests\Setting\ReligionRequest;
+use Modules\Contact\Services\Setting\ReligionService;
 use Modules\Core\Supports\Utility;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Throwable;
 
-class CountryController extends Controller
+
+/**
+ * @class ReligionController
+ * @package Contact
+ */
+class ReligionController extends Controller
 {
     /**
      * @var AuthenticatedSessionService
@@ -23,20 +30,20 @@ class CountryController extends Controller
     private $authenticatedSessionService;
 
     /**
-     * @var CountryService
+     * @var ReligionService
      */
-    private $countryService;
+    private $religionService;
 
     /**
      * @param AuthenticatedSessionService $authenticatedSessionService
-     * @param CountryService $countryService
+     * @param ReligionService $religionService
      */
     public function __construct(AuthenticatedSessionService $authenticatedSessionService,
-                                CountryService              $countryService)
+                                ReligionService              $religionService)
     {
 
         $this->authenticatedSessionService = $authenticatedSessionService;
-        $this->countryService = $countryService;
+        $this->religionService = $religionService;
     }
 
     /**
@@ -48,10 +55,10 @@ class CountryController extends Controller
     public function index(Request $request)
     {
         $filters = $request->except('page');
-        $countries = $this->countryService->countryPaginate($filters);
+        $religions = $this->religionService->religionPaginate($filters);
 
-        return view('contact::setting.country.index', [
-            'countries' => $countries
+        return view('contact::setting.religion.index', [
+            'religions' => $religions
         ]);
     }
 
@@ -62,22 +69,22 @@ class CountryController extends Controller
      */
     public function create()
     {
-        return view('contact::setting.country.create');
+        return view('contact::setting.religion.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param CountryRequest $request
+     * @param ReligionRequest $request
      * @return RedirectResponse
-     * @throws Exception|\Throwable
+     * @throws Exception|Throwable
      */
-    public function store(CountryRequest $request): RedirectResponse
+    public function store(ReligionRequest $request): RedirectResponse
     {
-        $confirm = $this->countryService->storeCountry($request->except('_token'));
+        $confirm = $this->religionService->storeReligion($request->except('_token'));
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.religions.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -93,10 +100,10 @@ class CountryController extends Controller
      */
     public function show($id)
     {
-        if ($country = $this->countryService->getCountryById($id)) {
-            return view('contact::setting.country.show', [
-                'country' => $country,
-                'timeline' => Utility::modelAudits($country)
+        if ($religion = $this->religionService->getReligionById($id)) {
+            return view('contact::setting.religion.show', [
+                'religion' => $religion,
+                'timeline' => Utility::modelAudits($religion)
             ]);
         }
 
@@ -112,9 +119,9 @@ class CountryController extends Controller
      */
     public function edit($id)
     {
-        if ($country = $this->countryService->getCountryById($id)) {
-            return view('contact::setting.country.edit', [
-                'country' => $country
+        if ($religion = $this->religionService->getReligionById($id)) {
+            return view('contact::setting.religion.edit', [
+                'religion' => $religion
             ]);
         }
 
@@ -124,18 +131,18 @@ class CountryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param CountryRequest $request
+     * @param ReligionRequest $request
      * @param  $id
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function update(CountryRequest $request, $id): RedirectResponse
+    public function update(ReligionRequest $request, $id): RedirectResponse
     {
-        $confirm = $this->countryService->updateCountry($request->except('_token', 'submit', '_method'), $id);
+        $confirm = $this->religionService->updateReligion($request->except('_token', 'submit', '_method'), $id);
 
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.religions.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -148,20 +155,20 @@ class CountryController extends Controller
      * @param $id
      * @param Request $request
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function destroy($id, Request $request)
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->countryService->destroyCountry($id);
+            $confirm = $this->religionService->destroyReligion($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.religions.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -172,20 +179,20 @@ class CountryController extends Controller
      * @param $id
      * @param Request $request
      * @return RedirectResponse|void
-     * @throws \Throwable
+     * @throws Throwable|\Throwable
      */
     public function restore($id, Request $request)
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->countryService->restoreCountry($id);
+            $confirm = $this->religionService->restoreReligion($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.settings.countries.index');
+            return redirect()->route('contact.settings.religions.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -200,12 +207,12 @@ class CountryController extends Controller
     {
         $filters = $request->except('page');
 
-        $countryExport = $this->countryService->exportCountry($filters);
+        $religionExport = $this->religionService->exportReligion($filters);
 
-        $filename = 'Country-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'Religion-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $countryExport->download($filename, function ($country) use ($countryExport) {
-            return $countryExport->map($country);
+        return $religionExport->download($filename, function ($religion) use ($religionExport) {
+            return $religionExport->map($religion);
         });
 
     }
@@ -217,7 +224,7 @@ class CountryController extends Controller
      */
     public function import()
     {
-        return view('contact::setting.country.import');
+        return view('contact::setting.religion.import');
     }
 
     /**
@@ -229,10 +236,10 @@ class CountryController extends Controller
     public function importBulk(Request $request)
     {
         $filters = $request->except('page');
-        $countrys = $this->countryService->getAllCountries($filters);
+        $religions = $this->religionService->getAllReligions($filters);
 
-        return view('contact::setting.country.index', [
-            'countrys' => $countrys
+        return view('contact::setting.religion.index', [
+            'religions' => $religions
         ]);
     }
 
@@ -246,12 +253,12 @@ class CountryController extends Controller
     {
         $filters = $request->except('page');
 
-        $countryExport = $this->countryService->exportCountry($filters);
+        $religionExport = $this->religionService->exportReligion($filters);
 
-        $filename = 'Country-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'Religion-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $countryExport->download($filename, function ($country) use ($countryExport) {
-            return $countryExport->map($country);
+        return $religionExport->download($filename, function ($religion) use ($religionExport) {
+            return $religionExport->map($religion);
         });
 
     }
