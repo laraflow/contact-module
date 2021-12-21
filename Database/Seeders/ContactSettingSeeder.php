@@ -20,6 +20,7 @@ class ContactSettingSeeder extends Seeder
 
         $settings = [
             'country' => [
+                'module' => 'Contact',
                 'name' => 'Country',
                 'icon' => 'fas fa-globe',
                 'route' => 'contact.settings.countries.index',
@@ -28,6 +29,7 @@ class ContactSettingSeeder extends Seeder
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'state' => [
+                'module' => 'Contact',
                 'name' => 'State',
                 'icon' => 'fas fa-address-card',
                 'route' => 'contact.settings.states.index',
@@ -36,6 +38,7 @@ class ContactSettingSeeder extends Seeder
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'city' => [
+                'module' => 'Contact',
                 'name' => 'City',
                 'icon' => 'fas fa-list-alt',
                 'route' => 'contact.settings.cities.index',
@@ -44,6 +47,7 @@ class ContactSettingSeeder extends Seeder
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'blood-group' => [
+                'module' => 'Contact',
                 'name' => 'Blood Group',
                 'icon' => 'fas fa-list-alt',
                 'route' => 'contact.settings.blood-groups.index',
@@ -52,6 +56,7 @@ class ContactSettingSeeder extends Seeder
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'gender' => [
+                'module' => 'Contact',
                 'name' => 'Gender',
                 'icon' => 'fas fa-list-alt',
                 'route' => 'contact.settings.genders.index',
@@ -60,6 +65,7 @@ class ContactSettingSeeder extends Seeder
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'occupation' => [
+                'module' => 'Contact',
                 'name' => 'Occupation',
                 'icon' => 'fas fa-list-alt',
                 'route' => 'contact.settings.occupations.index',
@@ -68,6 +74,7 @@ class ContactSettingSeeder extends Seeder
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'relation' => [
+                'module' => 'Contact',
                 'name' => 'Relation',
                 'icon' => 'fas fa-list-alt',
                 'route' => 'contact.settings.relations.index',
@@ -76,6 +83,7 @@ class ContactSettingSeeder extends Seeder
                 'enabled' => Constant::ENABLED_OPTION
             ],
             'religion' => [
+                'module' => 'Contact',
                 'name' => 'Religion',
                 'icon' => 'fas fa-list-alt',
                 'route' => 'contact.settings.religions.index',
@@ -83,7 +91,6 @@ class ContactSettingSeeder extends Seeder
                 'description' => 'user who can access this system',
                 'enabled' => Constant::ENABLED_OPTION
             ],
-
         ];
 
         foreach ($settings as $setting) {
