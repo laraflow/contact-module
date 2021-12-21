@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Traits\Test;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Modules\Contact\Models\Setting\BloodGroup;
