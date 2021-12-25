@@ -1,36 +1,36 @@
 ### Contact Field Comparetion
 
-|vCard|Google|Outlook|
-|-----|------|-------|
-|NAME|Name|First Name|
-|FN|Given Name|Middle Name|
-|-|Additional Name|Middle Name|
-|-|Family Name|Last Name|
+|vCard|Google|Outlook|Added|
+|-----|------|-------|-----|
+|NAME|Name|First Name|Y|
+|FN|Given Name|Middle Name|Y|
+|-|Additional Name|Middle Name|Y|
+|-|Family Name|Last Name|Y|
 |-|Yomi Name|-|
 |-|Given Name Yomi|-|
-|-|Additional Name Yomi|-|
+|-|Additional Name Yomi|-|Y|
 |-|Family Name Yomi|-|
-|TITLE|Name Prefix|Title|
-|-|Name Suffix|Suffix|
+|TITLE|Name Prefix|Title|Y|
+|-|Name Suffix|Suffix|Y|
 |-|Initials|Initials|
-|NICKNAME|Nickname|-|
+|NICKNAME|Nickname|-|Y|
 |-|Short Name|-|
 |-|Maiden Name|-|
-|BDAY|Birthday|Birthday|
-|GENDER|Gender|Gender|
-|GEO|Location|Location|
+|BDAY|Birthday|Birthday|Y|
+|GENDER|Gender|Gender|Y|
+|GEO|Location|Location|Y|
 |-|Billing Information|Billing Information|
 |PRODID|Directory Server|Directory Server|
 |-|Mileage|Mileage|
-|ROLE|Occupation|Profession|
-|-|Hobby|Hobby|
-|-|Sensitivity|Sensitivity|
-|-|Priority|Priority|
+|ROLE|Occupation|Profession|Y|
+|-|Hobby|Hobby|Y|
+|-|Sensitivity|Sensitivity|Y|
+|-|Priority|Priority|Y|
 |-|Subject|-|
-|NOTE|Notes|Notes|
-|LANG|Language|Language|
+|NOTE|Notes|Notes|Y|
+|LANG|Language|Language|Y|
 |PHOTO|Photo|-|
-|-|Group Membership|-|
+|-|Group Membership|-|Y|
 |EMAIL|E-mail 1 - Type|E-mail Address|
 |EMAIL|E-mail 1 - Value|E-mail Address|
 |-|Phone 1 - Type|Primary|
@@ -59,7 +59,7 @@
 |-|Organization 1 - Location|Office Location|
 |-|Organization 1 - Job Description|-|
 |URL|-|Web Page|
-|ANNIVERSARY|-|Anniversary|
+|ANNIVERSARY|-|Anniversary|Y|
 |-|-|Internet Free Busy|
 |-|-|E-mail 2 Address|
 |-|-|E-mail 3 Address|

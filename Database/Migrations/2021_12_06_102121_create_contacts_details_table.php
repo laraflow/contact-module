@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Modules\Core\Supports\Constant;
 
-class CreateWorkContactTable extends Migration
+class CreateContactsDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,17 +18,26 @@ class CreateWorkContactTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Table Structure
-        Schema::create('work_contact', function (Blueprint $table) {
+        Schema::create('contacts_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contact_id');
-            $table->foreignId('organization_id')->nullable();
-            $table->string('department')->nullable();
-            $table->string('job_title')->nullable();
-            $table->string('job_description')->nullable();
-
-
+            $table->date('birth')->nullable();
+            $table->date('anniversary')->nullable();
+            $table->string('location')->nullable();
+            $table->string('mileage')->nullable();
+            $table->string('hobby')->nullable();
+            $table->string('sensitivity', 50)->nullable();
+            $table->string('priority', 10)->nullable();
+            $table->string('language')->nullable();
+            $table->json('website')->nullable();
+            $table->foreignId('gender_id')->nullable();
+            $table->foreignId('blood_group_id')->nullable();
+            $table->foreignId('religion_id')->nullable();
+            $table->foreignId('relation_id')->nullable();
+            $table->foreignId('occupation_id')->nullable();
+            $table->foreignId('group_id')->nullable();
             $table->enum('enabled', array_keys(Constant::ENABLED_OPTIONS))
-                            ->default(Constant::ENABLED_OPTION)->nullable();
+                ->default(Constant::ENABLED_OPTION)->nullable();
             $table->foreignId('created_by')->index()->nullable();
             $table->foreignId('updated_by')->index()->nullable();
             $table->foreignId('deleted_by')->index()->nullable();
@@ -49,7 +58,7 @@ class CreateWorkContactTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Remove Table Structure
-        Schema::dropIfExists('work_contact');
+        Schema::dropIfExists('contacts_details');
 
         //Temporary Disable Foreign Key Constraints
         Schema::enableForeignKeyConstraints();

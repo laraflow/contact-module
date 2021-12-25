@@ -20,6 +20,11 @@ class CreateFamilyContactTable extends Migration
         //Table Structure
         Schema::create('family_contact', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('contact_id');
+            $table->string('father')->nullable();
+            $table->string('mother')->nullable();
+            $table->string('spouse')->nullable();
+            $table->json('children')->nullable();
             $table->enum('enabled', array_keys(Constant::ENABLED_OPTIONS))
                             ->default(Constant::ENABLED_OPTION)->nullable();
             $table->foreignId('created_by')->index()->nullable();
