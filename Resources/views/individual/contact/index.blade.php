@@ -27,8 +27,8 @@
 @section('breadcrumbs', \Breadcrumbs::render())
 
 @section('actions')
-    {!! \Html::linkButton('Add Contact', 'core.settings.contacts.create', [], 'mdi mdi-plus', 'success') !!}
-    {!! \Html::bulkDropdown('core.settings.contacts', 0, ['color' => 'warning']) !!}
+    {!! \Html::linkButton('Add Contact', 'contact.individual.contacts.create', [], 'mdi mdi-plus', 'success') !!}
+    {!! \Html::bulkDropdown('contact.individual.contacts', 0, ['color' => 'warning']) !!}
 @endsection
 
 @section('content')
@@ -38,16 +38,14 @@
                 <div class="card card-default">
                     @if(!empty($contacts))
                         <div class="card-body p-0">
-                            {!! \Html::cardSearch('search', 'core.settings.contacts.index',
+                            {!! \Html::cardSearch('search', 'contact.individual.contacts.index',
                             ['placeholder' => 'Search Contact Name etc.',
                             'class' => 'form-control', 'id' => 'search', 'data-target-table' => 'contact-table']) !!}
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0" id="contact-table">
                                     <thead class="thead-light">
                                     <tr>
-                                        <th class="align-middle">
-                                            @sortablelink('id', '#')
-                                        </th>
+                                        <th class="align-middle">@sortablelink('id', '#')</th>
                                         <th>@sortablelink('name', 'Name')</th>
                                         <th class="text-center">@sortablelink('enabled', 'Enabled')</th>
                                         <th class="text-center">@sortablelink('created_at', 'Created')</th>
@@ -61,8 +59,8 @@
                                                 {{ $contact->id }}
                                             </td>
                                             <td class="text-left">
-                                                @can('core.settings.contacts.show')
-                                                    <a href="{{ route('core.settings.contacts.show', $contact->id) }}">
+                                                @can('contact.individual.contacts.show')
+                                                    <a href="{{ route('contact.individual.contacts.show', $contact->id) }}">
                                                         {{ $contact->name }}
                                                     </a>
                                                 @else
@@ -74,7 +72,7 @@
                                             </td>
                                             <td class="text-center">{{ $contact->created_at->format(config('app.datetime')) ?? '' }}</td>
                                             <td class="exclude-search pr-3 text-center align-middle">
-                                                {!! \Html::actionDropdown('core.settings.contacts', $contact->id, array_merge(['show', 'edit'], ($contact->deleted_at == null) ? ['delete'] : ['restore'])) !!}
+                                                {!! \Html::actionDropdown('contact.individual.contacts', $contact->id, array_merge(['show', 'edit'], ($contact->deleted_at == null) ? ['delete'] : ['restore'])) !!}
                                             </td>
                                         </tr>
                                     @empty

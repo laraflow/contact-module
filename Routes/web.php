@@ -114,7 +114,7 @@ Route::name('contact.')->group(function () {
 });
 
 Route::prefix('contact')->name('contact.')->group(function () {
-    Route::prefix('individual')->group(function () {
+    Route::prefix('individual')->name('individual.')->group(function () {
         //Contact
         Route::resource('contacts', ContactController::class)->where(['contact' => '([0-9]+)']);
         Route::prefix('contacts')->name('contacts.')->group(function () {

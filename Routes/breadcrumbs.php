@@ -3,6 +3,8 @@
 use Carbon\Traits\Test;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
+use Modules\Contact\Models\Common\Group;
+use Modules\Contact\Models\Individual\Contact;
 use Modules\Contact\Models\Setting\BloodGroup;
 use Modules\Contact\Models\Setting\City;
 use Modules\Contact\Models\Setting\Country;
@@ -290,9 +292,6 @@ Breadcrumbs::for('contact.individual.contacts.edit', function (BreadcrumbTrail $
 
     $trail->push('Edit Contact', route('contact.individual.contacts.edit', $contact->id));
 });
-
-
-
 
 /****************************************** Group ******************************************/
 Breadcrumbs::for('contact.common.groups.index', function (BreadcrumbTrail $trail) {
