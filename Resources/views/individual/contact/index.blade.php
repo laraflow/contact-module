@@ -42,42 +42,59 @@
                             ['placeholder' => 'Search Contact Name etc.',
                             'class' => 'form-control', 'id' => 'search', 'data-target-table' => 'contact-table']) !!}
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0" id="contact-table">
+                                <table class="table table-hover mb-0" id="user-table">
                                     <thead class="thead-light">
                                     <tr>
-                                        <th class="align-middle">@sortablelink('id', '#')</th>
-                                        <th>@sortablelink('name', 'Name')</th>
+                                        <th class="align-middle">
+                                            @sortablelink('id', '#')
+                                        </th>
+                                        <th class="pl-0">@sortablelink('name', 'Name')</th>
+                                        <th class="text-center">@sortablelink('email', 'Email')</th>
+                                        <th class="text-center">@sortablelink('mobile', 'Mobile')</th>
                                         <th class="text-center">@sortablelink('enabled', 'Enabled')</th>
                                         <th class="text-center">@sortablelink('created_at', 'Created')</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse($contacts as $index => $contact)
-                                        <tr @if($contact->deleted_at != null) class="table-danger" @endif>
+                                    @forelse($contacts as $contact)
+                                        <tr @if($contact->deleted_at != null) class="table-danger" @endif >
                                             <td class="exclude-search align-middle">
                                                 {{ $contact->id }}
                                             </td>
-                                            <td class="text-left">
-                                                @can('contact.individual.contacts.show')
-                                                    <a href="{{ route('contact.individual.contacts.show', $contact->id) }}">
-                                                        {{ $contact->name }}
-                                                    </a>
-                                                @else
-                                                    {{ $contact->name }}
-                                                @endcan
+                                            <td class="text-left pl-0">
+                                                <div class="media">
+                                                    <img class="align-self-center mr-1 img-circle direct-chat-img elevation-1"
+                                                         src="{{ $contact->getFirstMediaUrl('avatars') }}" alt="{{ $contact->name }}">
+                                                    <div class="media-body">
+                                                        <p class="my-0">
+                                                            @if(auth()->user()->can('core.settings.users.show') || $contact->id == auth()->user()->id)
+                                                                <a href="{{ route('core.settings.users.show', $contact->id) }}">
+                                                                    {{ $contact->name }}
+                                                                </a>
+                                                            @else
+                                                                {{ $contact->name }}
+                                                            @endif
+                                                        </p>
+                                                        <p class="mb-0 small">{{ $contact->username }}</p>
+                                                    </div>
+                                                </div>
+
+
                                             </td>
+                                            <td class="text-left">{{ $contact->email ?? '-' }}</td>
+                                            <td class="text-center">{{ $contact->mobile ?? '-' }}</td>
                                             <td class="text-center exclude-search">
                                                 {!! \Html::enableToggle($contact) !!}
                                             </td>
                                             <td class="text-center">{{ $contact->created_at->format(config('app.datetime')) ?? '' }}</td>
                                             <td class="exclude-search pr-3 text-center align-middle">
-                                                {!! \Html::actionDropdown('contact.individual.contacts', $contact->id, array_merge(['show', 'edit'], ($contact->deleted_at == null) ? ['delete'] : ['restore'])) !!}
+                                                {!! \Html::actionDropdown('core.settings.users', $contact->id, array_merge(['show', 'edit'], ($contact->deleted_at == null) ? ['delete'] : ['restore'])) !!}
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="exclude-search text-center">No data to display</td>
+                                            <td colspan="7" class="exclude-search text-center">No data to display</td>
                                         </tr>
                                     @endforelse
                                     </tbody>

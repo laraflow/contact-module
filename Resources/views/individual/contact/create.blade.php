@@ -26,7 +26,7 @@
 @section('breadcrumbs', \Breadcrumbs::render(Route::getCurrentRoute()->getName()))
 
 @section('actions')
-    {!! \Html::backButton('core.settings.contacts.index') !!}
+    {!! \Html::backButton('contact.individual.contacts.index') !!}
 @endsection
 
 @section('content')
@@ -34,8 +34,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-default">
-                    {!! \Form::open(['route' => 'core.settings.contacts.store', 'id' => 'contact-form']) !!}
-                    @include('core::setting.contact.form')
+                    {!! \Form::open(['route' => 'contact.individual.contacts.store', 'id' => 'contact-form']) !!}
+                    @include('contact::individual.contact.form')
                     {!! \Form::close() !!}
                 </div>
             </div>
