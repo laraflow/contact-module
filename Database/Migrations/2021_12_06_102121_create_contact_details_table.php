@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Modules\Core\Supports\Constant;
 
-class CreateContactsDetailsTable extends Migration
+class CreateContactDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateContactsDetailsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Table Structure
-        Schema::create('contacts_details', function (Blueprint $table) {
+        Schema::create('contact_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contact_id');
             $table->date('birth')->nullable();
@@ -58,7 +58,7 @@ class CreateContactsDetailsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Remove Table Structure
-        Schema::dropIfExists('contacts_details');
+        Schema::dropIfExists('contact_details');
 
         //Temporary Disable Foreign Key Constraints
         Schema::enableForeignKeyConstraints();

@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 use Modules\Core\Supports\Constant;
 
-class CreateContactsTable extends Migration
+class CreateGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,30 +18,18 @@ class CreateContactsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Table Structure
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
-            $table->string('model_type')->nullable();
-            $table->string('prefix')->nullable();
-            $table->string('first_name');
-            $table->string('middle_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('nick_name')->nullable();
-            $table->string('suffix')->nullable();
-            $table->json('additional_name')->nullable();
-            $table->json('phone')->nullable();
-            $table->json('email')->nullable();
-            $table->string('profile_slug')->nullable();
+            
+
             $table->enum('enabled', array_keys(Constant::ENABLED_OPTIONS))
-                ->default(Constant::ENABLED_OPTION)->nullable();
-            $table->string('notes')->nullable();
+                            ->default(Constant::ENABLED_OPTION)->nullable();
             $table->foreignId('created_by')->index()->nullable();
             $table->foreignId('updated_by')->index()->nullable();
             $table->foreignId('deleted_by')->index()->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
             $table->dateTime('deleted_at')->nullable();
-
         });
     }
 
@@ -56,7 +44,7 @@ class CreateContactsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         //Remove Table Structure
-        Schema::dropIfExists('contacts');
+        Schema::dropIfExists('groups');
 
         //Temporary Disable Foreign Key Constraints
         Schema::enableForeignKeyConstraints();

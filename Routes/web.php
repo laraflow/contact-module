@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Contact\Http\Controllers\ContactController;
+use Modules\Contact\Http\Controllers\Individual\ContactController;
 use Modules\Contact\Http\Controllers\Setting\BloodGroupController;
 use Modules\Contact\Http\Controllers\Setting\CityController;
 use Modules\Contact\Http\Controllers\Setting\CountryController;
@@ -22,7 +22,7 @@ use Modules\Contact\Http\Controllers\Setting\StateController;
 |
 */
 
-Route::name('contact.')->group(function() {
+Route::name('contact.')->group(function () {
     Route::prefix('settings')->name('settings.')->group(function () {
         //Country
         Route::resource('countries', CountryController::class)->where(['country' => '([0-9]+)']);
@@ -113,6 +113,17 @@ Route::name('contact.')->group(function() {
     });
 });
 
-Route::prefix('contact')->name('contact.')->group(function() {
-    Route::get('/', [ContactController::class, 'index']);
+Route::prefix('contact')->name('contact.')->group(function () {
+    Route::prefix('individual')->group(function () {
+        //Contact
+        Route::resource('contacts', ContactController::class)->where(['contact' => '([0-9]+)']);
+        Route::prefix('contacts')->name('contacts.')->group(function () {
+            Route::patch('{contact}/restore', [ContactController::class, 'restore'])
+                ->name('restore')->where(['contact' => '([0-9]+)']);
+            Route::get('export', [ContactController::class, 'export'])->name('export');
+            Route::get('import', [ContactController::class, 'import'])->name('import');
+            Route::post('import', [ContactController::class, 'importBulk']);
+            Route::post('print', [ContactController::class, 'print'])->name('print');
+        });
+    });
 });

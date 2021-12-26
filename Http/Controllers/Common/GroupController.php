@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Contact\Http\Controllers\Individual;
+namespace Modules\Contact\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 use Exception;
@@ -12,14 +12,14 @@ use Illuminate\Http\Request;
 use Modules\Auth\Services\AuthenticatedSessionService;
 use Modules\Core\Supports\Utility;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Modules\Contact\Services\Individual\ContactService;
-use Modules\Contact\Http\Requests\Individual\ContactRequest;
+use Modules\Contact\Services\Common\GroupService;
+use Modules\Contact\Http\Requests\Common\GroupRequest;
 
 /**
- * @class ContactController
+ * @class GroupController
  * @package $NAMESPACE$
  */
-class ContactController extends Controller
+class GroupController extends Controller
 {
     /**
      * @var AuthenticatedSessionService
@@ -27,21 +27,22 @@ class ContactController extends Controller
     private $authenticatedSessionService;
     
     /**
-     * @var ContactService
+     * @var GroupService
      */
-    private $contactService;
+    private $groupService;
 
     /**
-     * ContactController Constructor
+     * GroupController Constructor
      *
      * @param AuthenticatedSessionService $authenticatedSessionService
-     * @param ContactService $contactService
+     * @param GroupService $groupService
      */
     public function __construct(AuthenticatedSessionService $authenticatedSessionService,
-                                ContactService              $contactService)
+                                GroupService              $groupService)
     {
+
         $this->authenticatedSessionService = $authenticatedSessionService;
-        $this->contactService = $contactService;
+        $this->groupService = $groupService;
     }
     
     /**
@@ -53,10 +54,10 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         $filters = $request->except('page');
-        $contacts = $this->contactService->contactPaginate($filters);
+        $groups = $this->groupService->groupPaginate($filters);
 
-        return view('contact::individual.contact.index', [
-            'contacts' => $contacts
+        return view('contact::common.group.index', [
+            'groups' => $groups
         ]);
     }
 
@@ -67,22 +68,22 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('contact::individual.contact.create');
+        return view('contact::common.group.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param ContactRequest $request
+     * @param GroupRequest $request
      * @return RedirectResponse
      * @throws Exception|\Throwable
      */
-    public function store(ContactRequest $request): RedirectResponse
+    public function store(GroupRequest $request): RedirectResponse
     {
-        $confirm = $this->contactService->storeContact($request->except('_token'));
+        $confirm = $this->groupService->storeGroup($request->except('_token'));
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.individual.contacts.index');
+            return redirect()->route('contact.common.groups.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -98,10 +99,10 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        if ($contact = $this->contactService->getContactById($id)) {
-            return view('contact::individual.contact.show', [
-                'contact' => $contact,
-                'timeline' => Utility::modelAudits($contact)
+        if ($group = $this->groupService->getGroupById($id)) {
+            return view('contact::common.group.show', [
+                'group' => $group,
+                'timeline' => Utility::modelAudits($group)
             ]);
         }
 
@@ -117,9 +118,9 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        if ($contact = $this->contactService->getContactById($id)) {
-            return view('contact::individual.contact.edit', [
-                'contact' => $contact
+        if ($group = $this->groupService->getGroupById($id)) {
+            return view('contact::common.group.edit', [
+                'group' => $group
             ]);
         }
 
@@ -129,18 +130,18 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param ContactRequest $request
+     * @param GroupRequest $request
      * @param  $id
      * @return RedirectResponse
      * @throws \Throwable
      */
-    public function update(ContactRequest $request, $id): RedirectResponse
+    public function update(GroupRequest $request, $id): RedirectResponse
     {
-        $confirm = $this->contactService->updateContact($request->except('_token', 'submit', '_method'), $id);
+        $confirm = $this->groupService->updateGroup($request->except('_token', 'submit', '_method'), $id);
 
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
-            return redirect()->route('contact.individual.contacts.index');
+            return redirect()->route('contact.common.groups.index');
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
@@ -159,14 +160,14 @@ class ContactController extends Controller
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->contactService->destroyContact($id);
+            $confirm = $this->groupService->destroyGroup($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.individual.contacts.index');
+            return redirect()->route('contact.common.groups.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -183,14 +184,14 @@ class ContactController extends Controller
     {
         if ($this->authenticatedSessionService->validate($request)) {
 
-            $confirm = $this->contactService->restoreContact($id);
+            $confirm = $this->groupService->restoreGroup($id);
 
             if ($confirm['status'] == true) {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             } else {
                 notify($confirm['message'], $confirm['level'], $confirm['title']);
             }
-            return redirect()->route('contact.individual.contacts.index');
+            return redirect()->route('contact.common.groups.index');
         }
         abort(403, 'Wrong user credentials');
     }
@@ -205,12 +206,12 @@ class ContactController extends Controller
     {
         $filters = $request->except('page');
 
-        $contactExport = $this->contactService->exportContact($filters);
+        $groupExport = $this->groupService->exportGroup($filters);
 
-        $filename = 'Contact-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'Group-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $contactExport->download($filename, function ($contact) use ($contactExport) {
-            return $contactExport->map($contact);
+        return $groupExport->download($filename, function ($group) use ($groupExport) {
+            return $groupExport->map($group);
         });
 
     }
@@ -222,7 +223,7 @@ class ContactController extends Controller
      */
     public function import()
     {
-        return view('contact::individual.contactimport');
+        return view('contact::common.groupimport');
     }
 
     /**
@@ -234,10 +235,10 @@ class ContactController extends Controller
     public function importBulk(Request $request)
     {
         $filters = $request->except('page');
-        $contacts = $this->contactService->getAllContacts($filters);
+        $groups = $this->groupService->getAllGroups($filters);
 
-        return view('contact::individual.contactindex', [
-            'contacts' => $contacts
+        return view('contact::common.groupindex', [
+            'groups' => $groups
         ]);
     }
 
@@ -251,12 +252,12 @@ class ContactController extends Controller
     {
         $filters = $request->except('page');
 
-        $contactExport = $this->contactService->exportContact($filters);
+        $groupExport = $this->groupService->exportGroup($filters);
 
-        $filename = 'Contact-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
+        $filename = 'Group-' . date('Ymd-His') . '.' . ($filters['format'] ?? 'xlsx');
 
-        return $contactExport->download($filename, function ($contact) use ($contactExport) {
-            return $contactExport->map($contact);
+        return $groupExport->download($filename, function ($group) use ($groupExport) {
+            return $groupExport->map($group);
         });
 
     }

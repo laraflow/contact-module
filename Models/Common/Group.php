@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Contact\Models\Individual;
+namespace Modules\Contact\Models\Common;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
 use Modules\Core\Models\Setting\User;
@@ -12,17 +12,17 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * @class Contact
- * @package Modules\Contact\Models\Individual
+ * @class Group
+ * @package Modules\Contact\Models\Common
  */
-class Contact extends Model implements Auditable
+class Group extends Model implements Auditable
 {
     use AuditableTrait, HasFactory, SoftDeletes, Sortable;
 
     /**
      * @var string $table
      */
-    protected $table = 'contacts';
+    protected $table = '';
 
     /**
      * @var string $primaryKey
@@ -36,9 +36,7 @@ class Contact extends Model implements Auditable
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'model_type', 'prefix', 'first_name', 'middle_name',
-        'last_name', 'nick_name', 'suffix', 'additional_name', 'phone',
-        'email', 'profile_slug', 'enabled', 'notes', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = [ /*****/'enabled', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -52,11 +50,7 @@ class Contact extends Model implements Auditable
      *
      * @var array
      */
-    protected $casts = [
-        'additional_name' => 'array',
-        'phone' => 'array',
-        'email' => 'array',
-    ];
+    protected $casts = [];
 
     /**
      * The model's default values for attributes when new instance created.
@@ -64,11 +58,7 @@ class Contact extends Model implements Auditable
      * @var array
      */
     protected $attributes = [
-        'enabled' => 'yes',
-        'model_type' => Contact::class,
-        'additional_name' => '[]',
-        'phone' => ['mobile' => null],
-        'email' => ['email' => null],
+        'enabled' => 'yes'
     ];
 
     /************************ Static Factory ************************/
@@ -76,7 +66,7 @@ class Contact extends Model implements Auditable
     /*
     protected static function newFactory()
     {
-        return \Modules\Contact\Database\Factories\Individual/ContactFactory::new();
+        return \Modules\Contact\Database\Factories\Common/GroupFactory::new();
     }
     */
 
@@ -104,15 +94,5 @@ class Contact extends Model implements Auditable
     public function deletedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'deleted_by');
-    }
-
-    /************************ Relations ************************/
-
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
