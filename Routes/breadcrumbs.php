@@ -259,3 +259,37 @@ Breadcrumbs::for('contact.settings.religions.edit', function (BreadcrumbTrail $t
 
     $trail->push('Edit Religion', route('contact.settings.religions.edit', $religion->id));
 });
+
+/****************************************** Contact ******************************************/
+Breadcrumbs::for('contact.individual.contacts.index', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('core.settings.index');
+
+    $trail->push('Contacts', route('contact.individual.contacts.index'));
+});
+
+Breadcrumbs::for('contact.individual.contacts.create', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('contact.individual.contacts.index');
+
+    $trail->push('Add Contact', route('contact.individual.contacts.create'));
+});
+
+Breadcrumbs::for('contact.individual.contacts.show', function (BreadcrumbTrail $trail, $contact) {
+
+    $trail->parent('contact.individual.contacts.index');
+
+    $contact = ($contact instanceof Contact) ? $contact : $contact[0];
+
+    $trail->push($contact->name, route('contact.individual.contacts.show', $contact->id));
+});
+
+Breadcrumbs::for('contact.individual.contacts.edit', function (BreadcrumbTrail $trail, Contact $contact) {
+
+    $trail->parent('contact.individual.contacts.show', [$contact]);
+
+    $trail->push('Edit Contact', route('contact.individual.contacts.edit', $contact->id));
+});
+
+
+
