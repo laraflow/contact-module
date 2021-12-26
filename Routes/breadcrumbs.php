@@ -4,6 +4,7 @@ use Carbon\Traits\Test;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Modules\Contact\Models\Common\Group;
+use Modules\Contact\Models\Common\Label;
 use Modules\Contact\Models\Individual\Contact;
 use Modules\Contact\Models\Setting\BloodGroup;
 use Modules\Contact\Models\Setting\City;
@@ -13,6 +14,13 @@ use Modules\Contact\Models\Setting\Occupation;
 use Modules\Contact\Models\Setting\Relation;
 use Modules\Contact\Models\Setting\Religion;
 use Modules\Contact\Models\Setting\State;
+
+Breadcrumbs::for('contact.index', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('home');
+
+    $trail->push('Contact', route('contact.index'));
+});
 
 /****************************************** Country ******************************************/
 Breadcrumbs::for('contact.settings.countries.index', function (BreadcrumbTrail $trail) {
@@ -262,10 +270,81 @@ Breadcrumbs::for('contact.settings.religions.edit', function (BreadcrumbTrail $t
     $trail->push('Edit Religion', route('contact.settings.religions.edit', $religion->id));
 });
 
+/****************************************** Common ******************************************/
+
+Breadcrumbs::for('contact.common.index', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('contact.index');
+
+    $trail->push('Contact', route('contact.common.index'));
+});
+
+/****************************************** Group ******************************************/
+Breadcrumbs::for('contact.common.groups.index', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('contact.common.index');
+
+    $trail->push('Groups', route('contact.common.groups.index'));
+});
+
+Breadcrumbs::for('contact.common.groups.create', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('contact.common.groups.index');
+
+    $trail->push('Add Group', route('contact.common.groups.create'));
+});
+
+Breadcrumbs::for('contact.common.groups.show', function (BreadcrumbTrail $trail, $group) {
+
+    $trail->parent('contact.common.groups.index');
+
+    $group = ($group instanceof Group) ? $group : $group[0];
+
+    $trail->push($group->name, route('contact.common.groups.show', $group->id));
+});
+
+Breadcrumbs::for('contact.common.groups.edit', function (BreadcrumbTrail $trail, Group $group) {
+
+    $trail->parent('contact.common.groups.show', [$group]);
+
+    $trail->push('Edit Group', route('contact.common.groups.edit', $group->id));
+});
+
+/****************************************** Label ******************************************/
+Breadcrumbs::for('contact.common.labels.index', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('contact.common.index');
+
+    $trail->push('Labels', route('contact.common.labels.index'));
+});
+
+Breadcrumbs::for('contact.common.labels.create', function (BreadcrumbTrail $trail) {
+
+    $trail->parent('contact.common.labels.index');
+
+    $trail->push('Add Label', route('contact.common.labels.create'));
+});
+
+Breadcrumbs::for('contact.common.labels.show', function (BreadcrumbTrail $trail, $label) {
+
+    $trail->parent('contact.common.labels.index');
+
+    $label = ($label instanceof Label) ? $label : $label[0];
+
+    $trail->push($label->name, route('contact.common.labels.show', $label->id));
+});
+
+Breadcrumbs::for('contact.common.labels.edit', function (BreadcrumbTrail $trail, Label $label) {
+
+    $trail->parent('contact.common.labels.show', [$label]);
+
+    $trail->push('Edit Label', route('contact.common.labels.edit', $label->id));
+});
+
 /****************************************** Contact ******************************************/
 Breadcrumbs::for('contact.individual.contacts.index', function (BreadcrumbTrail $trail) {
 
-    $trail->parent('core.settings.index');
+    $trail->parent('contact.index');
 
     $trail->push('Contacts', route('contact.individual.contacts.index'));
 });
@@ -293,36 +372,6 @@ Breadcrumbs::for('contact.individual.contacts.edit', function (BreadcrumbTrail $
     $trail->push('Edit Contact', route('contact.individual.contacts.edit', $contact->id));
 });
 
-/****************************************** Group ******************************************/
-Breadcrumbs::for('contact.common.groups.index', function (BreadcrumbTrail $trail) {
-
-    $trail->parent('core.settings.index');
-
-    $trail->push('Groups', route('contact.common.groups.index'));
-});
-
-Breadcrumbs::for('contact.common.groups.create', function (BreadcrumbTrail $trail) {
-
-    $trail->parent('contact.common.groups.index');
-
-    $trail->push('Add Group', route('contact.common.groups.create'));
-});
-
-Breadcrumbs::for('contact.common.groups.show', function (BreadcrumbTrail $trail, $group) {
-
-    $trail->parent('contact.common.groups.index');
-
-    $group = ($group instanceof Group) ? $group : $group[0];
-
-    $trail->push($group->name, route('contact.common.groups.show', $group->id));
-});
-
-Breadcrumbs::for('contact.common.groups.edit', function (BreadcrumbTrail $trail, Group $group) {
-
-    $trail->parent('contact.common.groups.show', [$group]);
-
-    $trail->push('Edit Group', route('contact.common.groups.edit', $group->id));
-});
 
 
 

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Contact\Http\Controllers\Common\GroupController;
+use Modules\Contact\Http\Controllers\Common\LabelController;
 use Modules\Contact\Http\Controllers\Individual\ContactController;
 use Modules\Contact\Http\Controllers\Setting\BloodGroupController;
 use Modules\Contact\Http\Controllers\Setting\CityController;
@@ -112,8 +114,35 @@ Route::name('contact.')->group(function () {
 
     });
 });
-
 Route::prefix('contact')->name('contact.')->group(function () {
+   Route::get('/', [ContactController::class, 'index'])->name('index');
+
+    Route::prefix('common')->name('common.')->group(function () {
+        Route::get('/', [ContactController::class, 'index'])->name('index');
+        //Group
+        Route::resource('groups', GroupController::class)->where(['group' => '([0-9]+)']);
+        Route::prefix('groups')->name('groups.')->group(function () {
+            Route::patch('{group}/restore', [GroupController::class, 'restore'])
+                ->name('restore')->where(['group' => '([0-9]+)']);
+            Route::get('export', [GroupController::class, 'export'])->name('export');
+            Route::get('import', [GroupController::class, 'import'])->name('import');
+            Route::post('import', [GroupController::class, 'importBulk']);
+            Route::post('print', [GroupController::class, 'print'])->name('print');
+        });
+
+        //Label
+        Route::resource('labels', LabelController::class)->where(['label' => '([0-9]+)']);
+        Route::prefix('labels')->name('labels.')->group(function () {
+            Route::patch('{label}/restore', [LabelController::class, 'restore'])
+                ->name('restore')->where(['label' => '([0-9]+)']);
+            Route::get('export', [LabelController::class, 'export'])->name('export');
+            Route::get('import', [LabelController::class, 'import'])->name('import');
+            Route::post('import', [LabelController::class, 'importBulk']);
+            Route::post('print', [LabelController::class, 'print'])->name('print');
+        });
+
+    });
+
     Route::prefix('individual')->name('individual.')->group(function () {
         //Contact
         Route::resource('contacts', ContactController::class)->where(['contact' => '([0-9]+)']);
