@@ -31,7 +31,7 @@ class ContactSettingSeeder extends Seeder
             'state' => [
                 'module' => 'Contact',
                 'name' => 'State',
-                'icon' => 'fas fa-address-card',
+                'icon' => 'fas fa-mountain',
                 'route' => 'contact.settings.states.index',
                 'color' => '#007bff',
                 'description' => 'states available on countries',
@@ -40,7 +40,7 @@ class ContactSettingSeeder extends Seeder
             'city' => [
                 'module' => 'Contact',
                 'name' => 'City',
-                'icon' => 'fas fa-list-alt',
+                'icon' => 'fas fa-building',
                 'route' => 'contact.settings.cities.index',
                 'color' => '#007bff',
                 'description' => 'user who can access this system',
@@ -49,7 +49,7 @@ class ContactSettingSeeder extends Seeder
             'blood-group' => [
                 'module' => 'Contact',
                 'name' => 'Blood Group',
-                'icon' => 'fas fa-list-alt',
+                'icon' => 'fas fa-object-group',
                 'route' => 'contact.settings.blood-groups.index',
                 'color' => '#007bff',
                 'description' => 'user who can access this system',
@@ -58,7 +58,7 @@ class ContactSettingSeeder extends Seeder
             'gender' => [
                 'module' => 'Contact',
                 'name' => 'Gender',
-                'icon' => 'fas fa-list-alt',
+                'icon' => 'fas fa-venus-mars',
                 'route' => 'contact.settings.genders.index',
                 'color' => '#007bff',
                 'description' => 'user who can access this system',
@@ -67,7 +67,7 @@ class ContactSettingSeeder extends Seeder
             'occupation' => [
                 'module' => 'Contact',
                 'name' => 'Occupation',
-                'icon' => 'fas fa-list-alt',
+                'icon' => 'fas fa-user-md',
                 'route' => 'contact.settings.occupations.index',
                 'color' => '#007bff',
                 'description' => 'user who can access this system',
@@ -76,7 +76,7 @@ class ContactSettingSeeder extends Seeder
             'relation' => [
                 'module' => 'Contact',
                 'name' => 'Relation',
-                'icon' => 'fas fa-list-alt',
+                'icon' => 'fas fa-people-arrows',
                 'route' => 'contact.settings.relations.index',
                 'color' => '#007bff',
                 'description' => 'user who can access this system',
@@ -85,7 +85,7 @@ class ContactSettingSeeder extends Seeder
             'religion' => [
                 'module' => 'Contact',
                 'name' => 'Religion',
-                'icon' => 'fas fa-list-alt',
+                'icon' => 'fas fa-place-of-worship',
                 'route' => 'contact.settings.religions.index',
                 'color' => '#007bff',
                 'description' => 'user who can access this system',
