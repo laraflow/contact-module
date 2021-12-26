@@ -2,33 +2,15 @@
 
 namespace Modules\Contact\Models\Setting;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Kyslik\ColumnSortable\Sortable;
-use Modules\Core\Models\Setting\User;
-use OwenIt\Auditing\Auditable as AuditableTrait;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Query\Builder;
+use Modules\Core\Models\Setting\Catalog;
 
 /**
  * @class BloodGroup
  * @package Modules\Contact\Models\Setting
  */
-class BloodGroup extends Model implements Auditable
+class BloodGroup extends Catalog
 {
-    use AuditableTrait, HasFactory, SoftDeletes, Sortable;
-
-    /**
-     * @var string $table
-     */
-    protected $table = 'blood_groups';
-
-    /**
-     * @var string $primaryKey
-     */
-    protected $primaryKey = 'id';
-
     /**
      * The attributes that are mass assignable.
      * 'enabled' => to handle status,
@@ -43,58 +25,27 @@ class BloodGroup extends Model implements Auditable
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = ['model_type'];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'additional_info' => 'array'
-    ];
-
-    /**
-     * The model's default values for attributes when new instance created.
+     * The model's default values for attributes.
      *
      * @var array
      */
     protected $attributes = [
-        'enabled' => 'yes'
+        'model_type' => BloodGroup::class,
     ];
 
-    /************************ Static Factory ************************/
-
-    /*
-    protected static function newFactory()
-    {
-        return \Modules\Contact\Database\Factories\Setting\BloodGroupFactory::new();
-    }
-    */
-
-    /************************ Audit Relations ************************/
-
     /**
-     * @return BelongsTo
+     * The "booted" method of the model.
+     *
+     * @return void
      */
-    public function createdBy(): BelongsTo
+    protected static function booted()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        static::addGlobalScope('bloodGroup', function (Builder $builder) {
+            $builder->where('model_type', '=', BloodGroup::class);
+        });
     }
 
-    /**
-     * @return BelongsTo
-     */
-    public function updatedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function deletedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'deleted_by');
-    }
 }
