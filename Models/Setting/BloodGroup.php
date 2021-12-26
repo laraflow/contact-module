@@ -2,7 +2,7 @@
 
 namespace Modules\Contact\Models\Setting;
 
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Modules\Core\Models\Setting\Catalog;
 
 /**
